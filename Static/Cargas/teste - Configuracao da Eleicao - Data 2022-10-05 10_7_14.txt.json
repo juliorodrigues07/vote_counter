@@ -1,0 +1,14 @@
+{
+    "teste": [
+        {
+            "Nome": "1",
+            "Digitos": 1,
+            "Ordem": 1
+        },
+        {
+            "Nome": "2",
+            "Digitos": 2,
+            "Ordem": 2
+        }
+    ]
+}

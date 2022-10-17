@@ -1,5 +1,6 @@
 import os
 from datetime import datetime
+import json
 
 now = datetime.now()
 out_file_name = 'Configuracao da Eleicao' + ' - Data ' + (str(now.date()) + ' ' + str(now.hour) + '_' +
@@ -16,7 +17,7 @@ if not os.path.isdir(os.getcwd() + stat + saida):
 
 def configElection():
     cargos = []
-
+    json_config = {}
     while True:
         try:
             nome_eleicao = str(input("Digite o nome da eleição:"))
@@ -26,9 +27,11 @@ def configElection():
             print('Insira valores inteiros válidos!')
 
     i = 0
+    lis = []
     while i < qtd_cargos:
-
+        dic = {}
         aux = []
+
         nome = str(input("Digite o nome do cargo: "))
 
         while True:
@@ -38,21 +41,26 @@ def configElection():
                 break
             except ValueError:
                 print('Insira valores inteiros válidos!')
-
         aux.append(ordem)
         aux.append(nome)
         aux.append(digitos)
         cargos.append(aux)
+        dic['Nome'] = nome
+        dic['Digitos'] = digitos
+        dic['Ordem'] = ordem
 
         aux.clear
         i = i + 1
-
+        lis.append(dic)
     cargos.sort()
-    nomeEle = nome_eleicao+ ' - ' + out_file_name
+    auxiliar = {}
+    print(lis)
+    json_config[nome_eleicao]= lis
+    nomeEle = nome_eleicao + ' - ' + out_file_name
     # Gera o arquivo de configuração da eleição no diretório destino
-    with open(os.getcwd() + stat + saida + nomeEle, 'w') as arquivo:
-        for item in cargos:
-            arquivo.write(str(item[1]) + ' ' + str(item[0]) + ' ' + str(item[2]) + '\n')
+    json_object = json.dumps(json_config, indent=4)
+    with open(os.getcwd() + stat + saida + nomeEle+'.json', 'w') as arquivo:
+            arquivo.write(json_object)
 
     return nomeEle, qtd_cargos
 
@@ -74,6 +82,6 @@ def readConfigFile(file_name):
 
 if __name__ == '__main__':
     file, qtd = configElection()
-    cargos, linhas, campos = readConfigFile(file, qtd)
+    #cargos, linhas, campos = readConfigFile(file)
 
 
